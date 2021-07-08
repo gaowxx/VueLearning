@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport"
+			content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+		<title>父子组件的数据传递</title>
+		<script src="./vue.js"></script>
+	</head>
+	<body>
+		<div id="app">
+			<div style="margin: 40px 0;">
+				<counter1 @add="handleObjClick" :count=num.data></counter1>
+				<counter1 :count="20"></counter1>
+			</div>
+			<div>
+				<counter @inc="handleBtnClick" :number="3"></counter>
+				<counter @inc="handleBtnClick" :number="2"></counter>
+				<div>{{total}}</div>
+			</div>
+		</div>
+		<script>
+			// 【总结】
+			// 父组件通过属性的形式给子组件传值，:number="3"
+			// 子组件通过事件触发的形式给父组件传值，this.$emit('inc', 2);
+			// 注意：单向数据流，子组件不能修改父组件传递来的数据，如果要使用，就拷贝一个副本，然后改变这个副本就可以了
+			// data: function() {
+			// 					return {
+			// 						num: this.count // 这里需要注意，如果改作子组件自己的变量名之后，{{}}里的变量名字也要改成对应的噢！
+			// 					}
+			// 				}
+
+
+			// 【子组件不能反过来修改父组件的参数】
+
+			// 例子1
+			// <counter :count="1"> 通过冒号传递给子组件的就是数字，如果不加冒号，传递过去的就是字符串
+			var counter1 = {
+				props: ['count'], // 子组件通过props接收父组件传递过来的数据
+				data: function() {
+					return {
+						num: this.count // 这里需要注意，如果改作子组件自己的变量名之后，{{}}里的变量名字也要改成对应的噢！
+					}
+				},
+				// 然后就可以使用count这个数据了
+				// 模板内的
+				template: '<div @click="handleItemClick">{{num}}</div>',
+				methods: {
+					handleItemClick: function() {
+						this.num++;
+						this.$emit('add');
+						console.log(this.num)
+					}
+				}
+			}
+
+			//例子2
+			// 注意【子组件不能反过来修改父组件的参数】
+			// 子组件的data必须是一个函数，在data的return里把传进来的数据变成自己的数据
+			// 把count数据赋值给number，number是子组件自己的
+			var counter = {
+				props: ['number'], // 子组件通过props接收父组件传递过来的数据num
+				data: function() {
+					return {
+						num: this.number
+					}
+				},
+				template: '<div @click="handleItemClick">{{num}}</div>', // 然后就可以使用count这个数据了
+				methods: {
+					handleItemClick: function() {
+						this.num = this.num + 2;
+						// 'inc'是子组件通过$emit抛出去的事件，父组件用@inc="XXX"去接收，@inc="XXX"里的XXX是写在父组件里的函数名，用来写对应的新的事件
+						// $emit可以携带多个参数，第二个参数2是父组件里需要用到的步长参数
+						this.$emit('inc', 2);
+						console.log(this.num)
+					}
+				}
+			}
+
+			var vm = new Vue({
+				el: '#app',
+				data: {
+					num: {
+						id: '0001',
+						data: '10'
+					},
+					total: 5
+				},
+				components: {
+					counter1: counter1,
+					counter: counter
+				},
+				methods: {
+					handleObjClick: function() {
+						this.num.data++;
+					},
+					// arg是子组件里抛出来的参数，这里是参数2
+					handleBtnClick: function(arg) {
+						this.total += arg
+					}
+				}
+			})
+		</script>
+	</body>
+</html>
