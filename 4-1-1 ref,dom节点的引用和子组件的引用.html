@@ -10,25 +10,50 @@
 	</head>
 	<body>
 		<div id="app">
-			
+			<div ref="hello" @click="handleClick">Hello world</div>
+			<div style="margin: 40px 0;"></div>
+			<div>
+				<counter ref="one" @change="handleChange"></counter>
+				<counter ref="two" @change="handleChange"></counter>
+				<div>{{total}}</div>
+			</div>
 		</div>
 		<script>
-			// 如果希望每一行都是子组件，下面是一个全局组件
-			Vue.component('row', {
-				data: function () {
-					return{
-						list:['haha','aaaa','bbbb']
+			// 理解ref的使用
+			// 1. 当它写在div这样标签上的时候，通过this.$refs.name获取到的内容，实际上是获取标签对应的dom元素
+			// 2. 当你在组件上去写ref，再通过this.$refs.name，你获取到的是子组件的引用
+			Vue.component('counter', {
+				data: function() {
+					return {
+						number: 0
 					}
 				},
-				// 外部传递进来的数据, 子组件从父级接收变量，对content进行接收
-				// 外部数据循环测试
-				props: ['content'], 
-				template: "<tr><td>{{content}}</td></tr>"
+				template: '<div @click="handleClick">{{number}}</div>',
+				methods: {
+					handleClick: function() {
+						this.number++
+						this.$emit('change')
+					}
+				}
 			})
 			var vm = new Vue({
 				el: '#app',
 				data: {
-					tbInfo: ["t1", "t2", "t3"]
+					total: 0
+				},
+				methods: {
+					// 这里整个vue实例里所有的引用，有一个引用的名字叫hello，它对应的是这个div的dom，它指向这个div的dom节点
+					// 在页面中可以用ref来获取dom节点，注意这里是refs
+					handleClick: function() {
+						console.log(this.$refs.hello.innerHTML)
+					},
+					handleChange: function() {
+						console.log(this.$refs.one.number)
+						console.log(this.$refs.two.number)
+						var newTotal = this.$refs.one.number + this.$refs.two.number
+						this.total = newTotal
+						return this.total
+					}
 				}
 			})
 		</script>
