@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport"
+			content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+		<title>Vue的模板语法</title>
+		<script src="./vue.js"></script>
+	</head>
+	<body>
+		<div id="app">
+			<div>{{name + ' Gao'}}</div>
+			<div v-text="name+ ' Gao'" :title="textName"></div>
+			<div v-html="name+ ' Gao'" @click="handleClick"></div>
+		</div>
+		<script>
+			var vm = new Vue({
+				el: '#app',
+				data: {
+					// name: '<h1>Vinci</h1>',
+					name: 'Vinci',
+					textName: 'text-name'
+				},
+				methods: {
+					handleClick: function() {
+						alert('hi')
+					}
+				}
+			})
+		</script>
+	</body>
+</html>

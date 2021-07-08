@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport"
+			content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+		<title>组件使用的细节点</title>
+		<script src="./vue.js"></script>
+	</head>
+	<body>
+		<div id="app">
+			<h3 style="margin: 10px 0;">table用组件的时候要记得用is【同理，ul、ol，select也是】</h3>
+			<div style="margin: 10px 0;">vue提供了is属性，tbody里面要写tr，用is表示tr其实是row组件，这样解析就不会出错</div>
+			<div style="margin: 10px 0;">子组件定义data，<b>data必须是函数</b>，返回一个数据对象</div>
+			<table>
+				<tbody>
+					<tr is="row"></tr>
+					<tr is="row"></tr>
+					<tr is="row"></tr>
+				</tbody>
+			</table>
+
+			<div style="margin: 30px 0;">如果在根组件里定义data用对象是没问题的，<b>但是非根组件，data必须是一个函数，同时这个函数要返回一个对象</b>，这个对象包含一个数据</div>
+			<div style="margin: 30px 0;">原因，子组件不像根组件只会被调用一次，它可能会被调用多次，所以它会和别人产生冲突，不该共享一套数据。通过函数返回对象，子组件可以有独立的数据存储。</div>
+			<div style="margin: 20px 0;">表格循环测试</div>
+			<table>
+				<tbody>
+					<tr is="row" v-for='item in tbInfo' v-bind:content="item"></tr>
+				</tbody>
+			</table>
+		</div>
+		<script>
+			// 如果希望每一行都是子组件，下面是一个全局组件
+			Vue.component('row', {
+				data: function () {
+					return{
+						list:['haha','aaaa','bbbb']
+					}
+				},
+				// 外部传递进来的数据, 子组件从父级接收变量，对content进行接收
+				// 外部数据循环测试
+				props: ['content'], 
+				template: "<tr><td>{{content}}</td></tr>"
+			})
+			var vm = new Vue({
+				el: '#app',
+				data: {
+					tbInfo: ["t1", "t2", "t3"]
+				}
+			})
+		</script>
+	</body>
+</html>

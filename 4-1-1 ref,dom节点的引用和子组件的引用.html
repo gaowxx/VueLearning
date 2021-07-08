@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport"
+			content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+		<title>ref,dom节点的引用和子组件的引用</title>
+		<script src="./vue.js"></script>
+	</head>
+	<body>
+		<div id="app">
+			
+		</div>
+		<script>
+			// 如果希望每一行都是子组件，下面是一个全局组件
+			Vue.component('row', {
+				data: function () {
+					return{
+						list:['haha','aaaa','bbbb']
+					}
+				},
+				// 外部传递进来的数据, 子组件从父级接收变量，对content进行接收
+				// 外部数据循环测试
+				props: ['content'], 
+				template: "<tr><td>{{content}}</td></tr>"
+			})
+			var vm = new Vue({
+				el: '#app',
+				data: {
+					tbInfo: ["t1", "t2", "t3"]
+				}
+			})
+		</script>
+	</body>
+</html>

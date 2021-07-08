@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport"
+			content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+		<title>Vue中的条件渲染</title>
+		<script src="./vue.js"></script>
+	</head>
+	<body>
+		<div id="app">
+			<div v-if="show" data-test="v-if">{{msg}}</div>
+			<div v-show="show" data-test="v-show">{{msg}}</div>
+			
+		    <div style="margin: 20px 0;">和v-else配合使用，要紧贴在一起使用</div>
+			<div v-if="show1">{{msg}}</div>
+			<div v-else>Bye Bye</div>
+			
+		    <div style="margin: 20px 0;">和v-else、v-else-if配合使用，要紧贴在一起使用</div>
+			<div v-if="show2 === 'a'">This is a</div>
+			<div v-else-if="show2 === 'b'">This is b</div>
+			<div v-else>This is others</div>
+			
+		    <div style="margin: 20px 0;">Key值</div>
+			<div style="margin: 5px 0;">Vue会尽量复用页面存在的dom，所以input被复用了，但是内容没有清空，这时候需要采用K值的方式解决这个问题</div>
+			<div style="margin: 5px 0;">当给每个元素标签添加key值的时候，Vue会知道这是唯一的一个元素，如果key值名字不一样的时候，Vue就不会去复用这个元素的内容</div>			
+			<div v-if="show3">用户名：<input key="username" type="text"></div>
+			<div v-else>邮箱名：<input key="pwd" type="text"></div>
+			
+		</div>
+		<script>
+			// v-show性能会高一点，因为不用一直删除、添加
+			
+			var vm = new Vue({
+				el: '#app',
+				data: {
+					show: true,
+					show1: true,
+					show2: 'a',
+					show3: false,
+					msg: 'hi world'
+				}
+			})
+		</script>
+	</body>
+</html>

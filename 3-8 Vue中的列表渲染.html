@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport"
+			content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+		<title>Vue中的列表渲染</title>
+		<script src="./vue.js"></script>
+	</head>
+	<body>
+		<div id="app">
+			<div style="margin: 10px 0;">为了提升循环的性能，要给每一项添加一个唯一的Key值，唯一的</div>
+			<div style="margin: 10px 0;">
+				加index也可以，但是不推荐，在频繁操作dom元素的数据的时候，它还是比较费性能的，它可能会让vue没办法充分的复用dom节点，所以不推荐使用index作为key值</div>
+			<div v-for="(item, index) of list">{{item}} ---- {{index}}</div>
+
+			<div style="margin: 20px 0;">当我们去给数组添加内容的时候，<b>不能用下标的形式给数组添加内容</b>，只能用vue提供的数组变异方法才可以，7个变异方法</div>
+			<div style="margin: 20px 0;">push pop shift unshift splice sort reverse</div>
+			<div v-for="(item, index) of list2" :key="item.id">{{item.text}} ---- {{index}}</div>
+
+			<div style="margin: 20px 0;">template可以帮助我们包裹元素，但它不会被渲染到页面上</div>
+			<template v-for="(item,index) of list3">
+				<div>
+					{{item.text}}----{{index}}
+				</div>
+				<span>
+					{{item.text}}
+				</span>
+			</template>
+
+			<div style="margin: 20px 0;">对象的循环</div>
+			<div style="margin: 20px 0;">遍历对象的时候，如果直接加值是会失败的，要这么加，改这个东西的引用</div>
+			<div v-for="(item, key, index) of userInfo">
+				{{item}}----{{key}}----{{index}}
+			</div>
+
+
+		</div>
+		<script>
+			// Vue.component('row', {
+			// 	props: ['content'],
+			// 	template: "<tr><td>{{content}}</td></tr>"
+			// })
+			// 局部组件的使用
+			var TodoItem = {
+				props: ['content'], // 外部传递进来的数据, 子组件从父级接收变量，对content进行接收
+				template: "<li>{{content}}</li>"
+			}
+
+			var vm = new Vue({
+				el: '#app',
+				components: {
+					TodoItem: TodoItem
+				},
+				data: {
+					content: ["hi2", "Vinci", "nice", "to", "see", "you"],
+					list: ["hi1", "Vinci", "nice", "to", "see", "you"],
+					list2: [{
+						id: '0001',
+						text: 'hello'
+					}, {
+						id: '0002',
+						text: 'world'
+					}, {
+						id: '0003',
+						text: 'hahaha'
+					}],
+					list3: [{
+						id: '0001',
+						text: 'hello'
+					}, {
+						id: '0002',
+						text: 'world'
+					}, {
+						id: '0003',
+						text: 'hahaha'
+					}],
+					userInfo: {
+						name: 'Vinci',
+						age: 28,
+						gender: 'female',
+						salary: "secret"
+					}
+				}
+			})
+		</script>
+	</body>
+</html>

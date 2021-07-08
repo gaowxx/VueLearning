@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport"
+			content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+		<title>Vue中的样式绑定</title>
+		<script src="./vue.js"></script>
+		<style>
+			.activated {
+				color: red;
+			}
+
+			.on {
+				color: blue;
+			}
+
+			.class1 {
+				font-size: 20px;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="app">
+			<div @click="handleDivClick" :class="{activated: isActive}">Hi World</div>
+			<div @click="handleDivClick" :class="[on, class1]">Bye Bye</div>
+			<div @click="handleDivClick" :style="styleObj">I am come back</div>
+			<div @click="handleDivClick" :style="[styleObj],{fontSize: '20px'}">I am going</div>
+		</div>
+		<script>
+			var vm = new Vue({
+				el: '#app',
+				data: {
+					firstName: 'Vinci',
+					lastName: 'Gao',
+					isActive: false,
+					on: '',
+					class1: 'class1',
+					styleObj: {
+						color: 'orange'
+					}
+				},
+				methods: {
+					handleDivClick: function() {
+						// 方式一 CLASS的对象绑定
+						// 在这里取反，就可以切换class
+						this.isActive = !this.isActive
+
+						// 方式二 CLASS的数组绑定
+						// 切换颜色
+						// if (this.on === 'on') {
+						// 	this.on = ''
+						// } else
+						// 	this.on = 'on'
+						// 换成三元表达
+						this.on = this.on === 'on' ? '' : 'on'
+
+						// 方式三 对象形式
+						// 切换颜色
+						this.styleObj.color = this.styleObj.color === "orange" ? "pink" : "orange"
+
+						// 方式四 数组方式
+						// div显示的样式，由数组的对象来决定，数组可以挂载多个对象
+						
+						// 总结
+						// 不论是绑定class还是sytle，都有2种方式，一种是对象，一种是数组
+					}
+				}
+			})
+		</script>
+	</body>
+</html>

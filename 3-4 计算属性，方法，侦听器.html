@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport"
+			content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+		<title>计算属性，方法，侦听器</title>
+		<script src="./vue.js"></script>
+	</head>
+	<body>
+		<div id="app">
+			<p> {{ fullName }} </p>
+			<input type="text" v-model="fullName">
+			<input type="text" v-model="firstName">
+			<input type="text" v-model="lastName">
+		</div>
+		<script>
+			var vm = new Vue({
+				el: '#app',
+				data: {
+					firstName: 'Vinci',
+					lastName: 'Gao',
+					age: 28
+				},
+				// 普通方法计算fullName，调用的时候要使用fullName()
+				// 方法没有计算属性高效，因为方法没有缓存机制
+				// methods: {
+				// 	fullNameMethod: function() {
+				// 		// console.log('普通方法计算了1次')
+				// 		return this.firstName + ' ' + this.lastName
+				// 	}
+				// },
+
+				// 计算属性 ,计算属性是内置缓存的
+				// 页面一执行的时候就调用了一次计算属性
+				// 缓存机制:
+				// 当它依赖的属性没有改变的时候，它就不会重新计算了，它会一直用上一次计算的结果
+				computed: {
+					fullName: {
+						// getter
+						get: function() {
+							// console.log("计算属性get执行了1次")
+							// console.log(arg)
+							return this.firstName + ' ' + this.lastName
+						},
+
+						// setter
+						set: function(newValue) {
+							console.log('computed setter...')
+							console.log(newValue.split(' '))
+							var names = newValue.split(' ')
+							console.log(names)
+							// this.firstName = names[0]
+							// this.lastName = names[names.length - 1]
+							return names[0] + names[names.length - 1]
+						}
+					}
+
+				},
+
+				watch: {
+					firstName: function() {
+						// console.log('监听FN计算了1次');
+						this.fullName = this.firstName + ' '
+						this.lastName;
+					},
+					lastName: function() {
+						// console.log('监听LN计算了1次');
+						this.fullName = this.firstName + ' '
+						this.lastName;
+					}
+				}
+			})
+		</script>
+	</body>
+</html>
