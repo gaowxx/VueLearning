@@ -17,16 +17,16 @@
 		</div>
 		<script>
 			Vue.component('item', {
-				template:'<div>hello bye</div>'
+				template: '<div>hello bye</div>'
 			})
-			// el这句说的是：vm这个实例，接管id为root的div的dom显示
+
 			var vm = new Vue({
-				el: '#root',
+				el: '#root', // el这句说的是：vm这个实例，接管id为root的div的dom显示
 				data: {
 					msg: 'hello world'
 				},
 				methods: {
-					handleClick: function () {
+					handleClick: function() {
 						alert('hi')
 					}
 				}

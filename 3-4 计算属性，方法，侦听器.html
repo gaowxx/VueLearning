@@ -59,6 +59,7 @@
 
 				},
 
+				// 之前set函数报错的原因，fullName被watch改动了，导致set了2次
 				watch: {
 					firstName: function() {
 						// console.log('监听FN计算了1次');

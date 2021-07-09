@@ -15,8 +15,8 @@
 				加index也可以，但是不推荐，在频繁操作dom元素的数据的时候，它还是比较费性能的，它可能会让vue没办法充分的复用dom节点，所以不推荐使用index作为key值</div>
 			<div v-for="(item, index) of list">{{item}} ---- {{index}}</div>
 
-			<div style="margin: 20px 0;">当我们去给数组添加内容的时候，<b>不能用下标的形式给数组添加内容</b>，只能用vue提供的数组变异方法才可以，7个变异方法</div>
-			<div style="margin: 20px 0;">push pop shift unshift splice sort reverse</div>
+			<div style="margin: 20px 0 0;">当我们去给数组添加内容的时候，<b>不能用下标的形式给数组添加内容</b>，只能用vue提供的数组变异方法才可以</div>
+			<div style="margin: 10px 0 20px;">【7个变异方法：push pop shift unshift splice sort reverse】</div>
 			<div v-for="(item, index) of list2" :key="item.id">{{item.text}} ---- {{index}}</div>
 
 			<div style="margin: 20px 0;">template可以帮助我们包裹元素，但它不会被渲染到页面上</div>
@@ -29,8 +29,8 @@
 				</span>
 			</template>
 
-			<div style="margin: 20px 0;">对象的循环</div>
-			<div style="margin: 20px 0;">遍历对象的时候，如果直接加值是会失败的，要这么加，改这个东西的引用</div>
+			<h3 style="margin: 20px 0;">对象的循环</h3>
+			<div style="margin: 20px 0;">遍历对象的时候，如果直接加值是会失败的，要改这个对象的引用</div>
 			<div v-for="(item, key, index) of userInfo">
 				{{item}}----{{key}}----{{index}}
 			</div>
@@ -38,10 +38,6 @@
 
 		</div>
 		<script>
-			// Vue.component('row', {
-			// 	props: ['content'],
-			// 	template: "<tr><td>{{content}}</td></tr>"
-			// })
 			// 局部组件的使用
 			var TodoItem = {
 				props: ['content'], // 外部传递进来的数据, 子组件从父级接收变量，对content进行接收

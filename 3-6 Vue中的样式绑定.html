@@ -23,12 +23,18 @@
 	</head>
 	<body>
 		<div id="app">
+			<h3 style="margin: 20px 0 0;">方式一 CLASS的对象绑定 :class={activated: isActive}</h3>
 			<div @click="handleDivClick" :class="{activated: isActive}">Hi World</div>
+			<h3 style="margin: 20px 0 0;">方式二 CLASS的数组绑定 :class=[on, class1]</h3>
 			<div @click="handleDivClick" :class="[on, class1]">Bye Bye</div>
+			<h3 style="margin: 20px 0 0;">方式三 对象形式 :style="styleObj"</h3>
 			<div @click="handleDivClick" :style="styleObj">I am come back</div>
+			<h3 style="margin: 20px 0 0;">方式四 数组方式 :style="[styleObj],{fontSize: '20px'}"</h3>
 			<div @click="handleDivClick" :style="[styleObj],{fontSize: '20px'}">I am going</div>
 		</div>
 		<script>
+			// 总结
+			// 不论是绑定class还是sytle，都有2种方式，一种是对象，一种是数组
 			var vm = new Vue({
 				el: '#app',
 				data: {
@@ -62,9 +68,7 @@
 
 						// 方式四 数组方式
 						// div显示的样式，由数组的对象来决定，数组可以挂载多个对象
-						
-						// 总结
-						// 不论是绑定class还是sytle，都有2种方式，一种是对象，一种是数组
+
 					}
 				}
 			})

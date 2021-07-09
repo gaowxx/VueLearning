@@ -24,7 +24,9 @@
 						get: function() {
 							return this.firstName + ' ' + this.lastName
 						},
-						set: function (v) {
+						// 更改fullName的时候会触发set
+						set: function(v) {
+							console.log(v);
 							var arr = v.split(" ");
 							this.firstName = arr[0];
 							this.lastName = arr[1];

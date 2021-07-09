@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport"
+			content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+		<title>is属性_组件使用的细节点</title>
+		<script src="./vue.js"></script>
+	</head>
+	<body>
+		<div id="app">
+			<div>【表格循环测试】</div>
+			<table>
+				<tbody>
+					<tr is="row" v-for='item in tbInfo' :content="item"></tr>
+				</tbody>
+			</table>
+		</div>
+		<script>
+			// table用组件的时候要记得用is【同理，ul、ol，select也是】
+			// vue提供了is属性，tbody里面要写tr，用is表示tr其实是row组件，这样解析就不会出错
+			// 
+			// 子组件定义data，data必须是函数，返回一个数据对象
+			// 如果在根组件里定义data用对象是没问题的，但是非根组件，data必须是一个函数，同时这个函数要返回一个对象
+			// 【原因】子组件不像根组件只会被调用一次，它可能会被调用多次，所以它会和别人产生冲突，不该共享一套数据。通过函数返回对象，子组件可以有独立的数据存储。		
+
+			// 下面是一个全局组件
+			Vue.component('row', {
+				// 外部传递进来的数据, 子组件从父级接收变量，对content进行接收
+				// 外部数据循环测试
+				props: ['content'],
+				template: "<tr><td>{{content}}</td></tr>"
+			})
+			var vm = new Vue({
+				el: '#app',
+				data: {
+					tbInfo: ["t1", "t2", "t3"]
+				}
+			})
+		</script>
+	</body>
+</html>

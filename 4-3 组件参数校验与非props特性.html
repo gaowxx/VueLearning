@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport"
+			content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+		<title>组件参数校验与非props特性</title>
+		<script src="./vue.js"></script>
+	</head>
+	<body>
+		<div id="root">
+			<child content="hahah6"></child>
+			<test :content=num></test>
+		</div>
+		<script>
+			//总结
+			// props要求父组件传，子组件要接，然后可以在子组件里可以用传过来的东西，属性不会显示在dom里
+			// 非props是父组件传，子组件不接，在子组件里就不能用传过来的内容，非props的数值会显示在dom里
+
+			// 例子1
+			// 父组件给子组件传递参数 <child content="hello world"></child>
+			// 子组件有权对参数进行约束, 先把content接收进来
+			Vue.component('child', {
+				// 原本的写法 props: ["content"]
+				// 设置好content的数据类型后，再写 <child content="123"></child> Vue就会报一个警告
+				// 【注意：现在如果传递的是数字，需要通过冒号传递数字】
+				props: {
+					// content: Number // 第一种：在此对参数做约束，比如必须是String或者必须是Number
+					// content: [Number, String] // 第二种：【借助数组语法】 要么是字符串，要么是数字
+					content: { // 第三种， 可以跟一个对象
+						type: String,
+						// required:true // required意思是:子组件接收一个content属性，它是必传的，如果把父组件里的content="hahah"删掉就会报错
+						required: false, // 如果是false就不是强制必填
+						default: 'default value', //  默认值：如果不传值，它会使用一个默认值default value，如果父组件传递了content，它就会用传递的值
+						// 定义content的长度
+						// 子组件接收一个属性content，它的类型是String，value就是传入的字符串内容，它长度必须大于5
+						validator: function(value) {
+							return (value.length > 5)
+						}
+					}
+				},
+				template: "<div>{{content}}</div>"
+			})
+
+
+			// 例子3
+			// 传递Number
+			Vue.component('test', {
+				props: {
+					content: Number
+				},
+				template: "<div style='margin: 40px 0;'>{{content}}</div>"
+			})
+
+			var vm = new Vue({
+				el: '#root',
+				data: {
+					num: 1122
+				}
+			})
+		</script>
+	</body>
+</html>

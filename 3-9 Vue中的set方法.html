@@ -15,15 +15,15 @@
 			</div>
 		</div>
 		<script>
+			// 总结
+			// 数组改变就有3种方式: 改变引用，Vue.set，数组的变异方法
+			// 对象改变就有2种方式: 改变引用，Vue.set
+			
 			// Vue.set(vm.userInfo,"address","beijing")
 			// "beijing"
 
 			// .set既是Vue中全局的方法，也是一个实例方法$set
 			// vm.$set(vm.userInfo, "address","beijing")
-
-			// 总结
-			// 数组改变就有3种方式: 改变引用，Vue.set，数组的变异方法
-			// 对象改变就有2种方式: 改变引用，Vue.set
 			var vm = new Vue({
 				el: '#app',
 				data: {

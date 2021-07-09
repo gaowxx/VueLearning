@@ -1,49 +1,48 @@
 <!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>使用组件化思想修改todoList</title>
-    <script src="./vue.js"></script>
-</head>
-<body>
-<div id="app">
-    <input type="text" v-model="inputValue">
-    <button v-on:click="handleBtnClick">提交</button>
-    <ul>
-        <todo-item v-for="item in list"
-                   v-bind:content="item">
-        </todo-item>
-    </ul>
-</div>
-<script>
-  // v-bind [向子组件传入绑定值]
-  // 循环list，每项值给item，使用变量content，通过v-bind把item传给todo-item
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport"
+			content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+		<title>使用组件化思想修改todoList</title>
+		<script src="./vue.js"></script>
+	</head>
+	<body>
+		<div id="app">
+			<input type="text" v-model="inputValue">
+			<button v-on:click="handleBtnClick">提交</button>
+			<ul>
+				<todo-item v-for="item in list" v-bind:content="item">
+				</todo-item>
+			</ul>
+		</div>
+		<script>
+			// v-bind [向子组件传入绑定值]
+			// 循环list，每项值给item，使用变量content，通过v-bind把item传给todo-item
 
 
-  // 这个方法是vue提供用来写全局组件的语法
-  // 用TodoItem来代替上面的li标签
-  // 标签与声明的名字是对应的，- 与驼峰要换一下
-  Vue.component("TodoItem", {
-    props: ['content'], // 子组件从父级接收变量，对content进行接收
-    template: "<li>{{content}}</li>"  // 子组件使用父组件传递进来的变量content
-  })
+			// 这个方法是vue提供用来写全局组件的语法
+			// 用TodoItem来代替上面的li标签
+			// 标签与声明的名字是对应的，- 与驼峰要换一下
+			Vue.component("TodoItem", {
+				props: ['content'], // 子组件从父级接收变量，对content进行接收
+				template: "<li>{{content}}</li>" // 子组件使用父组件传递进来的变量content
+			})
 
-  var app = new Vue({
-    el: '#app', // 实例负责接管处理的区域，在这里接管id为"app"部分的内容
-    data: {  // 定义一组数据，里面有一个content数据，它的内容是hello world再通过{{}}差值表达式来调用data的数据
-      list: [],
-      inputValue: ''  // 数据双向绑定
-    },
-    methods: {
-      handleBtnClick: function () {
-        this.list.push(this.inputValue)
-        this.inputValue = '' // 让push完inputValue后，input置空
-      }
-    }
-  })
-</script>
-</body>
+			var app = new Vue({
+				el: '#app', // 实例负责接管处理的区域，在这里接管id为"app"部分的内容
+				data: { // 定义一组数据，里面有一个content数据，它的内容是hello world再通过{{}}差值表达式来调用data的数据
+					list: [],
+					inputValue: '' // 数据双向绑定
+				},
+				methods: {
+					handleBtnClick: function() {
+						this.list.push(this.inputValue)
+						this.inputValue = '' // 让push完inputValue后，input置空
+					}
+				}
+			})
+		</script>
+	</body>
 </html>
