@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport"
+			content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+		<title>非父子组件间的传值</title>
+		<script src="./vue.js"></script>
+	</head>
+	<body>
+		<div id="root">
+			<child content="Vinci"></child>
+			<child content="Gao"></child>
+		</div>
+		<script>
+			// 非父子组件间的传值 
+			// 【解决方式】
+			// 方式一：
+			// 通过vuex，放在项目中讲
+
+			// 方式二：
+			// 总线机制 / Bus / 发布订阅模式 / 观察者模式
+
+			// 思路整理
+			// 1. Vue.prototype.bus = new Vue()
+			// 2. 子组件内通过data对父组件传进来值进行拷贝
+			// 3. 子组件内需要用到的变量都要通过拷贝后定义的属性名进行使用
+			// 4. 子组件的methods方法里通过this.bus.$emit('change', this.slefContent)向外抛出一个事件名以及参数
+			// 5. 通过mounted函数监听bus的抛出来的这个事件以及参数
+			// 6. mounted内需要通过var this_ = this改变func里的this指向，解决单向数据流的问题：方法参考第2点data拷贝数据
+			
+			// -------------------------------------------------------------
+			
+			// 需要实现的效果： 点击child中某一个的时候，2个child变成同一个String
+
+			// 步骤1：把Vue的prototype上挂一个bus属性，它是一个Vue的实例
+			// 设置以后，每个Vue实例上都会有bus属性，它都指向一个空的Vue的实例
+			Vue.prototype.bus = new Vue()
+
+			Vue.component('child', {
+				// 解决单向数据流的问题，和之前一样对父组件传进来的值做一个拷贝
+				data:function () {
+					return {
+						slefContent: this.content
+					}
+				},
+				props: {
+					content: String
+				},
+				// 在子组件里绑定一个点击事件，在子组件的methods里定义方法
+				template: "<div @click='handleClick'>{{slefContent}}</div>",
+				methods: {
+					handleClick: function() {
+						// this.bus就是实例上挂载的bus属性，bus又是一个Vue的实例
+						// 那么它就会有$emit这个方法，$emit就可以向外触发change这个事件
+						// change事件触发的时候携带了一个数据 this.content
+						// 为了避免单向数据流的问题，把this.content都替换成this.selfContent
+						this.bus.$emit('change', this.slefContent)
+					}
+				},
+				// mounted是每个子组件被挂载的时候会执行的一个函数
+				// 其他的子组件要监听，借助一个生命周期钩子mounted，让这个组件去监听bus的change这个事件，然后alert传递过来的内容
+				// 提醒：弹出2次，因为2个child组件做了2次监听
+				mounted: function() {
+					// 需要加一下 var this_ = this ，改变一下func里的this指向，但是会有警告，原因是单向数据流的老问题，解决方法还是data的拷贝
+					var this_ = this
+					this.bus.$on('change', function(msg) {
+						// alert(msg)
+						// 直接这样写完，页面点击完的内容没变，是因为func里的this作用域发生了变化
+						// 把content换成子组件定义的selfContent
+						this_.slefContent = msg
+
+					})
+				}
+			})
+			var vm = new Vue({
+				el: '#root'
+			})
+		</script>
+	</body>
+</html>
