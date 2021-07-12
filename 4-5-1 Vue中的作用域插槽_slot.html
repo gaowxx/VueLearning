@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport"
+			content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+		<title>Vue中的作用域插槽</title>
+		<script src="./vue.js"></script>
+	</head>
+	<body>
+		<div id="root">
+			<h3>父组件给子组件传递slot的具体方法如下：</h3>
+			<child>
+				<template slot-scope="props">
+					<li>{{props.item}}</li>
+				</template>
+			</child>
+		</div>
+		<script>
+			// 总结1
+			// 在子组件用slot做一个循环但并不关心slot内部具体怎么实现。如果父组件调用了该子组件，那么父组件要给子组件传递一个slot
+			// 具体方法：
+			// 1.在最外层套一个template，然后定义一个slot-scope="props"，slot-scope="props"的属性值可以自己定义。
+			//   slot-scope="props"的意义是：当子组件用slot的时候，会往子组件里传递一个item数据，例2中slot里的v-for="item of list" :item="item"，
+			//   我们在上面child里就可以用这个item的数据，item 数据放在slot-scope后面跟着的属性之中，用插值表达式写 {{props.item}}
+
+			// 总结2
+			// 父组件调用子组件的时候，给子组件传递了一个插槽，这个插槽叫做作用域插槽
+			// 作用域插槽必须是template开头和结尾的一个内容。
+			// 同时通过slot-scope声明从子组件拿过来的数据都放在哪里（这里是放在“props”里），
+			// 还要告诉子组件接收的数据如何展示（这里是放在h1标签里显示）
+
+			// 什么时候使用作用域插槽？
+			// 当子组件做循环的时候，或者某一部分的dom要由外部传递进来的时候
+			// 子组件可以给父组件的插槽里传数据，父组件传递过来的这个插槽如果想接收这个数据，
+			// 必须在外层使用一个template，同时通过slot-scop的属性名字接收这个数据，再使用它
+
+
+			// 功能：子组件循环显示一个表
+			// 思考：child组件可能在很多地方被调用，那么该怎么循环?
+
+			// 例子1
+			// Vue.component('child', {
+			// 	data: function() {
+			// 		return {
+			// 			list: [1, 2, 3, 4]
+			// 		}
+			// 	},
+			// 	template: '<div><ul><li v-for="item of list">{{item}}</li></ul></div>'
+			// })
+
+			// 例子2
+			Vue.component('child', {
+				data: function() {
+					return {
+						list: [1, 2, 3, 4, 5, 5]
+					}
+				},
+				// child组件做一个list列表的循环，但是列表项的每一项怎么显示我并不关心，具体怎么显示，要外部来告诉我怎么显示
+				// 如果父组件调用了child，那么父组件要给子组件传递一个slot
+				template: '<div><ul><slot v-for="item of list" :item="item"></slot></ul></div>'
+			})
+
+			var vm = new Vue({
+				el: '#root'
+			})
+		</script>
+	</body>
+</html>

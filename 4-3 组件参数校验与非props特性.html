@@ -15,8 +15,9 @@
 		</div>
 		<script>
 			//总结
-			// props要求父组件传，子组件要接，然后可以在子组件里可以用传过来的东西，属性不会显示在dom里
-			// 非props是父组件传，子组件不接，在子组件里就不能用传过来的内容，非props的数值会显示在dom里
+			// 1. props要求父组件传，子组件要接，然后可以在子组件里可以用传过来的东西，属性不会显示在dom里
+			// 2. 非props是父组件传，子组件不接，在子组件里就不能用传过来的内容，非props的数值会显示在dom里
+			// 3. type 数据类型，required 必传项，default 默认项，validator 规则制定
 
 			// 例子1
 			// 父组件给子组件传递参数 <child content="hello world"></child>
@@ -28,6 +29,7 @@
 				props: {
 					// content: Number // 第一种：在此对参数做约束，比如必须是String或者必须是Number
 					// content: [Number, String] // 第二种：【借助数组语法】 要么是字符串，要么是数字
+					
 					content: { // 第三种， 可以跟一个对象
 						type: String,
 						// required:true // required意思是:子组件接收一个content属性，它是必传的，如果把父组件里的content="hahah"删掉就会报错

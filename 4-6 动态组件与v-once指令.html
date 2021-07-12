@@ -5,18 +5,22 @@
 		<meta name="viewport"
 			content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
 		<meta http-equiv="X-UA-Compatible" content="ie=edge">
-		<title>Vue中的作用域插槽</title>
+		<title>动态组件与v-once指令</title>
 		<script src="./vue.js"></script>
 	</head>
 	<body>
-		<div id="root">2
-		</div>
+		<div id="app">{{content}}</div>
 		<script>
-
-			
-			var vm = new Vue({
-				el: '#root'
+			var app = new Vue({
+				el: '#app', 
+				data: { 
+					content: 'hello world'
+				}
 			})
+
+			setTimeout(function() {
+				app.$data.content = 'bye bye'
+			}, 2000)
 		</script>
 	</body>
 </html>
