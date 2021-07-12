@@ -9,18 +9,86 @@
 		<script src="./vue.js"></script>
 	</head>
 	<body>
-		<div id="app">{{content}}</div>
+		<div id="root">
+			<child-one v-if="type === 'child-one'"></child-one>
+			<child-two v-if="type === 'child-two'"></child-two>
+			<!-- <component :is="type"></component> -->
+			<button @click='handleBtnClick'>change</button>
+		</div>
 		<script>
-			var app = new Vue({
-				el: '#app', 
-				data: { 
-					content: 'hello world'
+			// 总结
+			// 1. Vue里自带的动态组件标签，component，可以用is绑定type属性，但创建组件、销毁组件的过程耗费性能
+			// 2. 在template中加入v-once指令，可以通过内存调取元素，提高【静态数据】的展示效率
+
+
+			// 功能：做个toggle，当button点击的时候，一个1显示，一个2显示
+
+			// 例子1
+			// 通过三元表达式，配合v-if，实现功能
+			// Vue.component('child-one', {
+			// 	template: '<div>child-one</div>'
+			// })
+			// Vue.component('child-two', {
+			// 	template: '<div>child-two</div>'
+			// })
+			// var vm = new Vue({
+			// 	el: '#root',
+			// 	data: {
+			// 		type: 'child-one'
+			// 	},
+			// 	methods: {
+			// 		handleBtnClick() {
+			// 			this.type = this.type === 'child-one' ? 'child-two' : 'child-one'
+			// 		}
+			// 	}
+			// })
+
+			// 例子2
+			// 动态组件
+			// Vue里自带的动态组件标签，component，它带了一个属性: is，用is绑定type
+			// 原理：动态组件会根据is的变化去自动加载组件。
+			// 一开始进来，type是child-one，动态组件就会去显示one这个组件，点击完button，type变成two，动态组件就会销毁one去加载two
+			// 但是每次切换的时候都是创建组件、销毁组件，其实很耗费性能			
+			// Vue.component('child-one', {
+			// 	template: '<div>child-one</div>'
+			// })
+			// Vue.component('child-two', {
+			// 	template: '<div>child-two</div>'
+			// })
+			// var vm = new Vue({
+			// 	el: '#root',
+			// 	data: {
+			// 		type: 'child-one'
+			// 	},
+			// 	methods: {
+			// 		handleBtnClick() {
+			// 			this.type = this.type === 'child-one' ? 'child-two' : 'child-one'
+			// 		}
+			// 	}
+			// })
+
+			// 例子3
+			// v-once指令
+			// 原理：当child-one这个组件第一次被渲染的时候，因为它有v-once，它就直接放到内存里，
+			// 当切换的时候，child-two显示的时候，它也会被放到内存里。这样再切换的时候就不用重新创建one组件
+			// 它可以直接从内存拿之前的one出来用，v-once可以提高静态数据的展示效率。
+			Vue.component('child-one', {
+				template: '<div v-once>child-one</div>'
+			})
+			Vue.component('child-two', {
+				template: '<div v-once>child-two</div>'
+			})
+			var vm = new Vue({
+				el: '#root',
+				data: {
+					type: 'child-one'
+				},
+				methods: {
+					handleBtnClick() {
+						this.type = this.type === 'child-one' ? 'child-two' : 'child-one'
+					}
 				}
 			})
-
-			setTimeout(function() {
-				app.$data.content = 'bye bye'
-			}, 2000)
 		</script>
 	</body>
 </html>
