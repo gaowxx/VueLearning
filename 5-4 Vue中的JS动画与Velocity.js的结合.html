@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport"
+			content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+		<title>Vue中的JS动画与Velocity.js的结合</title>
+		<link rel="stylesheet" href="https://unpkg.com/animate.css@3.5.2/animate.min.css" />
+		<script src="./vue.js"></script>
+		<script src="./velocity.min.js"></script>
+		<style>
+			.fade-enter,
+			.fade-leave-to {
+				opacity: 0;
+			}
+
+			.fade-enter-active,
+			.fade-leave-active {
+				/* opacity: 1; */
+				transition: opacity 10s;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="root">
+			<div id="root">
+				<transition name="fade" @before-enter="handleBeforeEnter" @enter="handleEnter"
+					@after-enter="handleAfterEnter" @before-leave="handleBeforeLeave" @leave="handleLeave"
+					@after-leave="handleAfterLeave">
+					<div v-show="show">hello world</div>
+				</transition>
+				<button @click="handleClick">change</button>
+			</div>
+		</div>
+		<script>
+			// 当元素从隐藏到显示的时候，vue会触发beforeEnter
+			// 进场动画
+			// 1. @before-enter="handleBeforeEnter"，参数el是动画包裹的div标签
+			// 2. @enter="handleEnter"，接收2个参数
+			// 3. @after-enter="handleAfterEnter"
+			// 出场动画
+			// 1. @before-leave="handleBeforeLeave"
+			// 2. @leave="handleLeave"
+			// 3. @after-leave="handleAfterLeave"
+
+			var vm = new Vue({
+				el: '#root',
+				data: {
+					show: true
+				},
+				methods: {
+					handleClick: function() {
+						this.show = !this.show
+					},
+					// 1. @before-enter="handleBeforeEnter"
+					// el是动画包裹的div标签
+					handleBeforeEnter: function(el) {
+						console.log(el)
+						el.style.color = 'red'
+					},
+					// 2. @enter="handleEnter"
+					// 动画还没有执行的时候，它是红色，然后2秒之后，执行enter，它变成绿色
+					// 动画执行结束后要手动的调用done，告诉Vue动画已经执行完了
+					handleEnter: function(el, done) {
+						setTimeout(() => {
+							el.style.color = 'blue'
+							console.log(done)
+						}, 2000)
+						setTimeout(() => {
+							done()
+						}, 4000)
+					},
+					// 3. @after-enter="handleAfterEnter"
+					handleAfterEnter: function(el) {
+						el.style.color = "#000"
+					},
+					// 出场动画-同理
+					handleBeforeLeave: function(el) {
+						el.style.fontSize = "20px"
+					},
+					handleLeave: function(el, done) {
+						setTimeout(() => {
+							el.style.fontSize = "30px"
+						}, 2000)
+						setTimeout(() => {
+							done()
+						}, 6000)
+					},
+					handleAfterLeave: function(el) {
+						el.style.fontSize = "60px"
+					}
+				}
+			})
+		</script>
+	</body>
+</html>

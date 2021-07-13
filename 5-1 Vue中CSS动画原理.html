@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport"
+			content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+		<title>Vue中CSS动画原理</title>
+		<script src="./vue.js"></script>
+		<style>
+			.test-enter,
+			.test-leave-to {
+				opacity: 0;
+			}
+
+			.test-enter-active,
+			.test-leave-active {
+				transition: opacity 3s;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="root">
+			<div>如果transition没有name，那么style里就是 v-enter，默认是v</div>
+			<transition name="test">
+				<div v-if="show">hello world</div>
+			</transition>
+			<transition name="test">
+				<div v-show="show">hello world</div>
+			</transition>
+			<button @click="handleClick">change</button>
+		</div>
+		<script>
+			// 总结
+			// 只要在div外面用transition包裹，v-if和v-show都可以带动画效果，不是div，是动态组件也可以有动态效果
+			// 可以通过 v-if, v-show 来控制
+
+			// 功能：给hello world渐隐渐现，过渡效果
+			var vm = new Vue({
+				el: '#root',
+				data: {
+					show: true
+				},
+				methods: {
+					handleClick: function() {
+						this.show = !this.show
+					}
+				}
+			})
+		</script>
+	</body>
+</html>
