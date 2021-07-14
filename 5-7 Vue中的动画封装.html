@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport"
+			content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+		<title>Vue中的动画封装</title>
+		<link rel="stylesheet" href="https://unpkg.com/animate.css@3.5.2/animate.min.css" />
+		<script src="./vue.js"></script>
+	</head>
+	<body>
+		<div id="root">
+			<fade :show="show">
+				<div>hello world</div>
+			</fade>
+			<button @click="handleBtnClick">Add</button>
+		</div>
+		<script>
+			// 建立一个组件，通过slot让外部给子组件传递元素，还需要外部传递一个show的变量，
+			// 根据这个外部传递进来的show变量通过v-if来判断slot要不要被显示
+			Vue.component('fade', {
+				props: ['show'], // 接收外部父组件:show="show"传递进来的show变量
+				// 完整封装：把CSS动画转成JS动画，把动画样式也封装进去，通过动画执行钩子加进去，
+				// 然后通过methods里的函数设置动画样式，不要忘记done
+				template: '<transition appear @before-enter="handleBeforeEnter" @enter="handleEnter"><slot v-if="show"></slot></transition>',
+				methods: {
+					// 设置进场动画
+					handleBeforeEnter: function(el) {
+						el.style.color = "pink"
+					},
+					handleEnter: function(el, done) {
+						setTimeout(() => {
+							el.style.fontSize = "30px"
+							done()
+						}, 2000)
+					}
+				}
+			})
+			var vm = new Vue({
+				el: "#root",
+				data: {
+					show: true
+				},
+				methods: {
+					handleBtnClick: function() {
+						this.show = !this.show
+					}
+				}
+			})
+		</script>
+	</body>
+</html>

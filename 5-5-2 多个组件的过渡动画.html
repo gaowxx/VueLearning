@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport"
+			content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+		<title>Vue中多个组件的过渡动画</title>
+		<link rel="stylesheet" href="https://unpkg.com/animate.css@3.5.2/animate.min.css" />
+		<script src="./vue.js"></script>
+		<style>
+			.v-enter,
+			.v-leave-to {
+				opacity: 0;
+			}
+
+			.v-enter-active,
+			.v-leave-active {
+				transition: opacity 1s;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="root">
+			<transition mode="out-in">
+				<component :is="type"></component>
+			</transition>
+			<button @click="handleClick">toggle</button>
+		</div>
+		<script>
+			// 创建一个动态组件，通过:is对组件进行绑定
+			// 父组件的data中，type的默认值是child，所以默认展示的子组件就是child
+			// 用三元运算控制this.type的切换，从而控制动态组件的:is="type"的切换
+			Vue.component('child', {
+				template: '<div>child</div>'
+			})
+			Vue.component('child-one', {
+				template: '<div>child-one</div>'
+			})
+			var vm = new Vue({
+				el: "#root",
+				data: {
+					show: true,
+					type: 'child'
+				},
+				methods: {
+					handleClick: function() {
+						this.type = this.type === 'child' ? 'child-one' : 'child'
+					}
+				}
+			})
+		</script>
+	</body>
+</html>

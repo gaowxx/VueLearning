@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport"
+			content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+		<title>Vue中的列表过渡</title>
+		<link rel="stylesheet" href="https://unpkg.com/animate.css@3.5.2/animate.min.css" />
+		<script src="./vue.js"></script>
+		<style>
+			.v-enter,
+			.v-leave-to {
+				opacity: 0;
+			}
+
+			.v-enter-active,
+			.v-leave-active {
+				transition: opacity 1s;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="root">
+			<transition-group>
+				<div v-for="item of list" :key="item.id">{{item.txt}}</div>
+			</transition-group>
+			<button @click="handleBtnClick">Add</button>
+		</div>
+		<script>
+			// 在需要过渡动画的列表外层嵌套一个transition-group标签，添加完发现还是没有效果
+			// 需要添加CSS内容，加完就有动画效果了
+
+			// 原理：transition-group相当于在列表中每个div外面包一层transition，
+			// 把列表的过渡转化为单个元素的过渡，Vue会在单个元素的过渡的显示或隐藏的时候，
+			// 动态的找到时间点，增加对应的class名
+			
+			var count = 0;
+			var vm = new Vue({
+				el: "#root",
+				data: {
+					list: []
+				},
+				methods: {
+					handleBtnClick: function() {
+						this.list.push({
+							id: count++,
+							txt: 'hello world'
+						})
+					}
+				}
+			})
+		</script>
+	</body>
+</html>
